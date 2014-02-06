@@ -2,62 +2,44 @@
 #include <string>
 #include <cstring>
 #include <sstream>
+#include <bitset>
 
 using namespace std;
 typedef unsigned long long ulong;
 
 ulong string_to_ulong(string s) {
-  const char * ptr = s.c_str();
-  ulong ul;
+  const char * ptr = s.c_str(); // gir adgang til char array
   stringstream ss;
-  for(int i = 0; i < sizeof(ulong); i++) { // går igjennom 8 bokstaver.
+  
+  cout << "## string_to_ulong(); iteration av string: " << endl;
+  for(int i = 0; i < sizeof(ulong); i++) { // iterer str så mange ggr det er plass til i ulong (8 bytes)
     char c = *(ptr+i);
-    int rest;
-    cout << c << " - " << (int) c << endl;
-    for(int y = sizeof(ulong); y > 0; y--) { // finner ut binær tall representert i 1 byte
-      rest = (int)c % 2;
-      c = c / 2;
-      ss << rest; // lagrer binærtall til string 
-    }
-    ss << "\t";
-   
+    bitset<8> b(c); // ascii verdin til char lagres som binærkode på 1 byte
+    ss << b.to_string(); // 8 bits føyes på stringen
+    cout << c << "\t" << (int) c << "\t" << b.to_string() << endl;
   }
-  cout << ss.str() << endl;
-  ul = stoull(ss.str(),NULL,2);
+  cout << "# 64 bits: " << ss.str() << endl;  
+  bitset<64> b(ss.str()); // stringen blir oversatt til binærkode
+  ulong ul = b.to_ulong(); // binærkoden gjørs om til ulong
+  cout << "# Returverdi i string_to_ulong(): " << ul << endl;
   return ul;
 }
 
-string ulong_tostring(ulong nr) {
-  int bits = 64;
-  char bcode[bits];
-  int i = 0;
-  bcode[i++] = '0';
-  while(nr > 0) {
-    bcode[i++] = (nr%2 == 0) ? '0' : '1';
-    nr=nr/2;
-    cout << bcode[i-1];
+string ulong_tostring(ulong nr) {  
+  bitset<64> b(nr); // ulong blir lagd til binærkode på 8 bytes
+  stringstream ss;
+
+  for(int i = 0; i < sizeof(ulong); i++) { // forskyver 8 bits fremover i de 64 bitene
+    bitset<8> byte(b.to_string(), i*8, 8); // tar ut 8 bits fra koden.
+    ss << (char)byte.to_ulong(); // binærkodens ulong castes til char og legges på stringen.
   }
   
-  int bytes = 8;
-  char output[bytes];
-  i = 0;
-  int c = 0, potens = 8-1;
-  while(i < 8) {
-    if(bcode[i++] == '1') c += 2^potens--;
-  }
-  output[0] = c;
-  cout << output[0] << endl;
-  string s;
-  return s;
+  return ss.str();
 }
 
 int main(int argc, char* argv[]) {
   string text = "I love C++";
-  cout << text << endl;
-  ulong ul = string_to_ulong(text);
-  cout << ul << endl;
-  string s = ulong_tostring(ul);
-  cout << s << endl;
-
-
+  cout << "## Input (main): \"" << text << "\"" << endl;
+  string s = ulong_tostring(string_to_ulong(text));
+  cout << "## Utskrift: \"" << s << "\"" << endl;
 }
