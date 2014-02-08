@@ -12,10 +12,8 @@ using namespace std;
 void init_stopChars(set<char>& list) {
   int i = 0;
   char c;
-  while((c = (int) *(stopchars_c+i++)) != '\0') {
+  while((c = (int) *(stopchars_c+i++)) != '\0')
     list.insert(c);
-    cout << c << "\t" << (int) c << endl;
-  }
 }
 
 void init_stopWords(set<string>& list) {
@@ -58,7 +56,7 @@ string trimWord(string word, set<char>& invalid) {
   string output = ss.str();
   return output;
 }
-void makeLowerCase() {}
+
 bool is_stopWord(string word, set<string>& invalid) {
   for(set<string>::iterator it = invalid.begin(); it != invalid.end(); ++it) {
     string cmp = *it;
@@ -67,35 +65,62 @@ bool is_stopWord(string word, set<string>& invalid) {
   }
   return false;
 }
-void process_Word() { }
- 
+
+void print_nHighestCount(map<string,int>& words, int n) {
+  multimap<int, string, greater<int> > sortByCount;
+  map<string, int>::const_iterator wIter;
+
+  for (wIter = words.begin(); wIter != words.end(); wIter++)
+    sortByCount.insert(pair<int, string>(wIter->second, wIter->first));
+
+  multimap<int, string>::const_iterator cIter;
+  for (cIter = sortByCount.begin(); cIter != sortByCount.end() && n > 0; cIter++) {
+    cout << cIter->second << ":" << cIter->first << endl;
+    n--;
+  }
+} 
+
 int main(int argc, char* argv[]) {
+  if(argc != 2) {
+    cout << "Missing argument; wordcloud <n top results>" << endl;
+    exit(0);
+  }
+  int n = atoi(argv[1]); // antall ord som skal vises.
+
   set<char> stopChars;
   init_stopChars(stopChars);
   
   // test for å se om lista er riktig
-  set<char>::iterator it;
+  /*set<char>::iterator it;
   for(it = stopChars.begin(); it != stopChars.end(); ++it)
     if('\'' == *it) cout << *it << " OK!";
-
+  */
   set<string> stopWords;
   init_stopWords(stopWords);
-
+  /*
   // test
   set<string>::iterator sit;
   for(sit = stopWords.begin(); sit!= stopWords.end(); ++sit)
     cout << *sit << " ";
-  string word;
-  int i = (argc > 1) ? std::atoi(argv[1]) : 20;
-  std::cout << i << std::endl;
+  */
   
- // hente ut ord
-  for(;i > 0; i--) {
-    std::cin >> word;
+  string word;
+  map<string, int> words;
+  // hente ut ord
+  while(cin >> word) {
     word = trimWord(word, stopChars);
-    if(!is_stopWord(word, stopWords))
-      std::cout << word << std::endl;
+    if(!is_stopWord(word, stopWords)) {
+      words[word]++;
+    }
   }
+
+  print_nHighestCount(words, n);
+  // skriv ut count
+  /*
+  for (auto i = words.begin(); i != words.end(); i++) {
+      cout << i->first << " : " << i->second << endl;
+  }
+  */
 
   // strippe ord.
 
