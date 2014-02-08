@@ -38,10 +38,9 @@ string trimWord(string word, set<char>& invalid) {
   const char* ptr = word.c_str();
   stringstream ss;
   int i = 0;
-  char c = *ptr; // ingorer første ord uten denne?
+  char c = *ptr;
   set<char>::iterator it;
   while(c != '\0') {
-    c = *(ptr+i++);
     bool validchar = true;
     for(it = invalid.begin();it != invalid.end();++it) {
       if(c == *it) {
@@ -49,9 +48,11 @@ string trimWord(string word, set<char>& invalid) {
 	break;
       }
     }
-    c = tolower(c); // setter lower case.
-    if(validchar)
+    if(validchar) {
+      c = tolower(c); // setter lower case.
       ss << c;
+    }
+    c = *(ptr+(++i));
   }
   string output = ss.str();
   return output;
@@ -69,13 +70,14 @@ bool is_stopWord(string word, set<string>& invalid) {
 void print_nHighestCount(map<string,int>& words, int n) {
   multimap<int, string, greater<int> > sortByCount;
   map<string, int>::const_iterator wIter;
+  char delimiter = ':';
 
   for (wIter = words.begin(); wIter != words.end(); wIter++)
     sortByCount.insert(pair<int, string>(wIter->second, wIter->first));
 
   multimap<int, string>::const_iterator cIter;
   for (cIter = sortByCount.begin(); cIter != sortByCount.end() && n > 0; cIter++) {
-    cout << cIter->second << ":" << cIter->first << endl;
+    cout << cIter->second << delimiter << cIter->first << endl;
     n--;
   }
 } 
@@ -115,17 +117,4 @@ int main(int argc, char* argv[]) {
   }
 
   print_nHighestCount(words, n);
-  // skriv ut count
-  /*
-  for (auto i = words.begin(); i != words.end(); i++) {
-      cout << i->first << " : " << i->second << endl;
-  }
-  */
-
-  // strippe ord.
-
-  // gjør til lowercase
-
-  // sjekk om det finnes i stoplista.
-  // if (false); legg inn i map (??)
 }
