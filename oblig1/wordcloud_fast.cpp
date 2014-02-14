@@ -3,6 +3,7 @@
 #include "./stop.h" // inkluderer ord som skal ignoreres.
 #include <iostream>
 #include <string>
+#include <stdlib.h>
 
 using namespace std;
 
@@ -166,7 +167,7 @@ void List::deleteList(struct node *ptr) {
  */
 void List::reallySlowSort() {
   if(length < 2) // gir ikke mening å sortere 1 element, eller tom liste.
-    throw std::invalid_argument("liste er tom"); // tilfeldig løsning
+    return; // tilfeldig løsning
 
   struct node * current, * temp;
   current = head;

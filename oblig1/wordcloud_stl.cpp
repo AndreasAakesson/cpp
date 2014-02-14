@@ -6,6 +6,7 @@
 #include <sstream>
 #include <set>
 #include <cstring>
+#include <stdlib.h>
 
 using namespace std;
 
@@ -26,12 +27,12 @@ void init_stopWords(set<string>& list) {
   int i = 0;
   char c = *(stopwords_c+i++);
   while(c != '\0') {
-    stringstream ss;
+    string s;
     while(c != ',') {
-      ss << c; // bygger opp ord
+      s += c; // bygger opp ord
       c = (char) *(stopwords_c+i++);
     }
-    list.insert(ss.str()); // setter inn ord når delimiter "," er funnet.
+    list.insert(s); // setter inn ord når delimiter "," er funnet.
     c = *(stopwords_c+i++);
   }   
 }
@@ -42,7 +43,7 @@ void init_stopWords(set<string>& list) {
  */
 string trimWord(string word, set<char>& invalid) {
   const char* ptr = word.c_str();
-  stringstream ss;
+  string trimmed;
   int i = 0;
   char c = *ptr;
   set<char>::iterator it;
@@ -56,12 +57,11 @@ string trimWord(string word, set<char>& invalid) {
     }
     if(validchar) { // hvis bokstaven er lovlig, legg den til i ordet.
       c = tolower(c); // setter lower case.
-      ss << c;
+      trimmed += c;
     }
     c = *(ptr+(++i));
   }
-  string output = ss.str();
-  return output; // hade gått med return ss.str(), men lar den være åpen hvis operasjon skal utføres som f.eks. output.size()
+  return trimmed;
 }
 
 /*
