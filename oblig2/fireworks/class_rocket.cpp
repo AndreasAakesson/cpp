@@ -55,7 +55,7 @@ void rocket::operator++(){
     draw();
     if(--t == 0) {
         reset();
-        done == true;
+        done = true;
     }
     //done = (--t == 0);
 }
