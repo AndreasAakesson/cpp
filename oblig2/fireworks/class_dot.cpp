@@ -5,6 +5,9 @@
 #include <iostream> // slett
 #include <math.h> // ???
 
+/* Bestemmer hvor stor andel (av den tidligere satte fargen)
+ * den ny færgen (denne doten sin) skal innholde */
+#define COLOR_DIS 0.75 
 using namespace std;
 
 dot::dot(float _x, float _y, float _r) {
@@ -17,13 +20,11 @@ dot::dot(float _x, float _y, float _r) {
     
     // animated
     done = false;
-    t = 100;
+    t = 70;
     
     // has_color
-    //color = (rand()%236)+20;
-    color = fl_color();
-    
-    color = fl_color_average((rand()%236)+20, color, 0.5);
+    // henter tidligere færge (gitt av dot eller rocket) og blander denne med ny random færge.
+    color = fl_color_average(fl_color(), (rand()%236)+20, COLOR_DIS);
     
     // setter retning og hastighet
     direction = static_cast<float> (rand()) / TAU;
@@ -35,7 +36,6 @@ dot::~dot() {
 }
 
 void dot::draw() {
-    //fl_color(*red, *green, *blue);
     fl_color(color);
     fl_pie(x, y, r, r, 0.0, 360.0);
 }
@@ -47,13 +47,14 @@ void dot::clear() {
 }
 
 void dot::operator++(){
-    clear();
-    if(done)
-        return;
     
-    //justerer færge/fader ut..
-    if(t < 50) {
-       float fade = t/(50.0);
+    if(done) // hvis animasjonen er ferdig
+        return;
+    clear();
+    
+    //justerer færge/fader ut.. denne er ikke bulletproof.
+    if(t < 20) {
+       float fade = t/(10.0); // 10.0 gir kul blinkende effekt. 20.0 for riktig fadeout.
        color = fl_color_average(color, FL_BLACK, fade);
     }
     //color = fl_color_average(color, FL_BLACK, 0.97); - annen løsning
@@ -64,20 +65,18 @@ void dot::operator++(){
     // setter ny koordinat/"flytter"
     x += incx;
     y += incy;
-    // tegner dot
     
-    
-    
-    /* Gjør animasjonen VELDIG treg.
+    /* Gjør animasjonen VELDIG treg. Sjekk for å ikke tegne utenfør
     if((x > Fl::w() || x < 0) || (y > Fl::h() || y < 0 ))
         done = true;
     */
-    done = (--t == 0);
+    done = (--t == 0); // bestemmer om animasjonen er ferdig
+    // tegner dot
     draw();
 }
 
 void dot::reset(){
+    clear();
     x = x_orig;
     y = y_orig;
-    //clear();
 }

@@ -1,10 +1,3 @@
-/* 
- * File:   main.cpp
- * Author: Andreas
- *
- * Created on den 15 mars 2014, 15:19
- */
-
 #include <cstdlib>
 #include <FL/Fl.H>
 #include <FL/Fl_Window.H>
@@ -23,7 +16,7 @@ using namespace std;
 int main(int argc, char** argv) {
     srand(static_cast <unsigned> (time(0)));
     
-    fireworks f(WTITLE, WWIDTH, WHEIGHT, 7);
+    fireworks f(WTITLE, WWIDTH, WHEIGHT, 10);
     return Fl::run();
 }
 
