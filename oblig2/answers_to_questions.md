@@ -10,12 +10,12 @@
 
 **3.** *Basert på ditt forrige svar; hvis du skulle laget ett eller flere "namespaces" i dette prosjektet, hvilke skulle det vært? Hvilke filer skulle vært med i hvilket namespace og hvilke filer skulle hatt `using namespace ...` for de ulike (hvis flere) namespacene?*
 
-**Svar**: ...
+**Svar**: Alle metoder som bruker noe fra FL-biblioteket. F.eks. fl_pie hade f.eks. kunnet hete draw_circle. Vid using namespace fltk hade fl_pie blitt kallt på, men ved FG hade dens metode for å tegne en circle blitt kallt på.
 
 **4.** *Klassene `animated` og `animation_canvas` legger opp til polymorfi. Kunne `animation_canvas` vært implementert med templates i stedet? Hva ville vært fordeler og ulemper?*
 
-**Svar**: ...
+**Svar**: Ja, det kunde den har varit. Enligt wikipedia vil fordelen med templates være at den er type-safe, og programmet vil innholde mindre kode. Ulempen vil være at noen kompilatorer har dårlig støtte for templates, og kan ge utydlige feil-meldinger og gjøre debugging vanskligere.
 
 **5.** *Bortsett fra det du har diskutert, ser du andre svakheter i designet, eller andre ting du ville gjort anderledes?*
 
-**Svar**: ...
+**Svar**: Nei.

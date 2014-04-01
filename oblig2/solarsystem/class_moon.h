@@ -1,10 +1,3 @@
-/* 
- * File:   class_moon.h
- * Author: Andreas
- *
- * Created on den 21 mars 2014, 13:44
- */
-
 #ifndef CLASS_MOON_H
 #define	CLASS_MOON_H
 
